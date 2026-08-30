@@ -1,0 +1,22 @@
+1) Order Parameter in the Boxplot
+2) Select.dtype(include = 'number' /'str') function
+3) New way to see outliers-> check the code
+4) Do EDA Before the Data Cleaning (naya fanda hain)
+5) Assumptions of The Linear Regression( 5 assumptions , in gpt chat)
+6) What is distribution , kde plot,hist plot , qq plot , skewness , skew() function (revision)
+7) Revision of Handling Positive , Negative skewness(box-cox , log , power , yeo-johnson)
+8) Data Leakage concepts -> why we did not apply fit on testing data and preprocessing steps on testing data
+9) What is column Transformer , why we need it , how we can use it , why the code will look i we did not use it
+10) What is Pipeline , how we can use it , two ways to use Pipeline with columnTransformer(most column make multiple Pipelines and transform into one columnTransformer)
+11) Scaling Revision , types of scalar , need of scaling 
+12) Hyperparamater Tunning , (what it is , why it needed , what is randomizedSearchCV)
+13)randomizedSearchCV
+14) Model saving , when we need to write all preprocessing step at frontend , or when not
+15) What is PKL and joblib
+
+
+## Fastapi and pydantic:
+1) What is FastApi , what is route
+2) What is pydantic , basemodel , validation , for what pydantic is used , complete flow from input data to validation , how ro put validations
+3) what is typing and Literal
+4) 
