@@ -64,7 +64,7 @@
     <div class="metric-top">
       <span class="metric-label">Score range</span>
     </div>
-    <div class="metric-value">3 – 10</div>
+    <div class="metric-value">1 – 10</div>
     <div class="metric-sub">Higher reads as more resilient</div>
   </div>
   <div class="metric-card">
@@ -250,7 +250,7 @@
           <path class="idle-scope-path" d="M0,48 C30,48 35,20 50,48 C65,76 70,30 85,48 C100,66 110,48 130,48 C150,48 155,22 170,48 C185,74 190,32 205,48 C215,58 225,48 240,48" />
         </svg>
         <p class="idle-label">Your score will appear here</p>
-        <p class="idle-copy">Fill in the form and submit to generate a predicted mental health score from 3–10.</p>
+        <p class="idle-copy">Fill in the form and submit to generate a predicted mental health score from 1–10.</p>
       </div>
 
       <div class="state state-loading" id="state-loading" hidden>
@@ -262,6 +262,7 @@
           <li data-step="1">Encoding features</li>
           <li data-step="2">Scoring with model</li>
         </ul>
+        <p class="loading-note">First run can take up to a minute while the server wakes up — it's quick after that.</p>
       </div>
 
       <div class="state state-result" id="state-result" hidden>

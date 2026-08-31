@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const API_BASE = "https://metal-health-predictor.onrender.com";
+  const API_BASE = "http://127.0.0.1:8000";
 
   // ---------------------------------------------------------
   // Theme toggle (light / dark), persisted in localStorage
@@ -66,8 +66,35 @@
   const GAUGE_ARC_LENGTH = 314;
 
   let loadingStepTimers = [];
-  const SCORE_MIN = 3;
-  const SCORE_MAX = 10;
+  // Model's real practical output range — found by running the actual
+  // trained pipeline against all 5000 REAL rows in
+  // Student_Social_Media_And_Mental_Health_Impact.csv and taking the
+  // true min/max of its predictions on real data:
+  //   preds = model.predict(real_dataset_rows)
+  //   MODEL_MIN = preds.min()  -> 3.803
+  //   MODEL_MAX = preds.max()  -> 9.239
+  // (An earlier version used a range found from random synthetic
+  // test inputs, 4.5-8.3 — dropped, since random field combinations
+  // don't reflect real correlated student behavior and gave an
+  // untrustworthy range.)
+  const MODEL_MIN = 3.803;
+  const MODEL_MAX = 9.239;
+  // What we actually show the user — a friendlier, full 1–10 scale.
+  const DISPLAY_MIN = 1;
+  const DISPLAY_MAX = 10;
+
+  // Linearly remaps the model's real output range onto the full
+  // 1–10 scale shown to the user, so someone from a non-ML
+  // background sees an intuitive number instead of the model's
+  // raw, narrower prediction range.
+  function remapToDisplayScale(modelScore) {
+    const clampedModel = Math.max(MODEL_MIN, Math.min(MODEL_MAX, modelScore));
+    const fraction = (clampedModel - MODEL_MIN) / (MODEL_MAX - MODEL_MIN);
+    return DISPLAY_MIN + fraction * (DISPLAY_MAX - DISPLAY_MIN);
+  }
+
+  const SCORE_MIN = DISPLAY_MIN;
+  const SCORE_MAX = DISPLAY_MAX;
 
   function drawTicks() {
     document.querySelectorAll(".gauge-ticks").forEach((g) => {
@@ -213,33 +240,38 @@
   }
 
   function bandFor(score) {
-    if (score < 4) {
+    if (score <= 3) {
       return {
-        label: "Signal: strained",
-        context: "Your responses suggest elevated strain right now. Small shifts in sleep or screen time can go a long way.",
+        label: "Signal: low",
+        color: "#E15252",
+        context: "Your responses suggest the signal is running low right now. Small shifts in sleep or screen time can go a long way.",
         tags: ["Prioritize sleep", "Trim screen time", "Check in with someone"],
       };
     }
-    if (score < 7) {
+    if (score <= 7) {
       return {
-        label: "Signal: balanced",
+        label: "Signal: medium",
+        color: "#E0C22E",
         context: "Your rhythm looks fairly steady, with some room to recover and reset.",
         tags: ["Steady baseline", "Room to recover"],
       };
     }
     return {
       label: "Signal: strong",
+      color: "#6FBE5C",
       context: "Your habits point to a well-supported, resilient baseline. Keep it up.",
       tags: ["Resilient baseline", "Keep the rhythm"],
     };
   }
 
-  function renderResult(score) {
-    const clamped = Math.max(SCORE_MIN, Math.min(SCORE_MAX, score));
-    const { label, context, tags } = bandFor(clamped);
+  function renderResult(rawModelScore) {
+    const displayScore = remapToDisplayScale(rawModelScore);
+    const clamped = Math.max(SCORE_MIN, Math.min(SCORE_MAX, displayScore));
+    const { label, color, context, tags } = bandFor(clamped);
 
-    scoreNumberEl.textContent = score.toFixed(2);
+    scoreNumberEl.textContent = displayScore.toFixed(2);
     scoreBandEl.textContent = label;
+    scoreBandEl.style.color = color;
     scoreContextEl.textContent = context;
 
     scoreTagsEl.innerHTML = "";

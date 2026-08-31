@@ -446,6 +446,15 @@ select {
   appearance: none;
 }
 
+/* The dropdown option list is a native OS element and does not
+   reliably inherit the <select>'s own background/color — style it
+   explicitly so it never falls back to an unreadable white-on-light
+   combination, even when the field is in its red error state. */
+select option {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
 select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%2399968E' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -466,6 +475,13 @@ input:focus, select:focus {
   border-color: var(--red);
   background: var(--red-tint);
   animation: shake 0.4s ease;
+}
+/* Keep the dropdown's own option list on the normal readable
+   surface even when the closed select box is showing the red
+   error tint — the option list should never turn white/unreadable. */
+.field.field-error select option {
+  background: var(--surface-2);
+  color: var(--text-primary);
 }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -636,6 +652,14 @@ input:focus, select:focus {
 .loading-steps li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .loading-steps li.active { opacity: 1; color: #F2F1ED; }
 .loading-steps li.done { opacity: 0.75; color: var(--green); }
+
+.loading-note {
+  font-size: 11px;
+  color: rgba(242,241,237,0.4);
+  max-width: 210px;
+  margin: 16px 0 0;
+  line-height: 1.55;
+}
 
 .result-header-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,241,237,0.4); margin: 0 0 12px; }
 
