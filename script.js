@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const API_BASE = "https://metal-health-predictor-1.onrender.com";
+  const API_BASE = "https://metal-health-predictor.onrender.com";
 
   // ---------------------------------------------------------
   // Theme toggle (light / dark), persisted in localStorage
